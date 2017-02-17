@@ -170,6 +170,7 @@ fi
 
 # Checks for library functions.
 AC_FUNC_MMAP
+AC_FUNC_SYSCONF
 
 dnl Network libs
 AC_CHECK_FUNC(connect, checksocket=no, checksocket=yes)
@@ -186,6 +187,7 @@ case "x$LIBS" in
  *) AC_CHECK_LIB(nsl, inet_ntoa) ;;
 esac
 fi
+AC_CHECK_MEMBER(struct sockaddr.sa_len,AC_DEFINE(HAVE_STRUCT_SOCKADDR_SA_LEN, 1, [Define to use sockaddr.sa_len]),, [#include <sys/socket.h>])
 
 AC_CHECK_FUNC(setenv, AC_DEFINE(HAVE_SETENV, 1, [Define to use setenv]),)
 

@@ -59,6 +59,9 @@
 #include <libgen.h>
 #endif
 
+#include <libetpan-config.h>
+
+
 /*
   We suppose the maildir mailbox remains on one unique filesystem.
 */

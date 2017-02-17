@@ -125,18 +125,20 @@ prepare: prepare-recursive prepare-am
 # header file of libetpan under $(top_builddir)/include/libetpan/.
 prepare-am: prepare-local
 	@if test "$(etpaninclude_HEADERS)" != ""; then \
+	  echo "top_srcdir: $(top_srcdir) abs_top_srcdir: $(abs_top_srcdir)"; \
           echo "$(mkinstalldirs) $(top_builddir)/include/libetpan/"; \
           $(mkinstalldirs) $(top_builddir)/include/libetpan/;\
-	  echo "cd $(top_builddir)/include/libetpan/"; \
-	  cd $(top_builddir)/include/libetpan/ \
-	  && for hdr in $(etpaninclude_HEADERS) list_end; do \
+	  for hdr in $(etpaninclude_HEADERS) list_end; do \
            if test $${hdr} != list_end; then \
-	         if test -e ../../$(subdir)/$${hdr}; then \
-	           echo "$(LN_S) -f ../../$(subdir)/$${hdr} ."; \
-	           $(LN_S) -f ../../$(subdir)/$${hdr} .; \
+                 filepath="$(abs_top_srcdir)/$(subdir)"; \
+		 echo "Looking for $${filepath}/$${hdr}"; \
+	         if test -e $${filepath}/$${hdr}; then \
+	           echo "$(LN_S) -f $${filepath}/$${hdr} $(top_builddir)/include/libetpan"; \
+	           $(LN_S) -f $${filepath}/$${hdr} $(top_builddir)/include/libetpan; \
              else \
-	           echo "$(LN_S) -f ../../$(subdir)/$(srcdir)/$${hdr} ."; \
-	           $(LN_S) -f ../../$(subdir)/$(srcdir)/$${hdr} .; \
+	           echo "Failed the existence check"; \
+	           echo "$(LN_S) -f $(top_builddir)/$(subdir)/$${hdr} $(top_builddir)/include/libetpan"; \
+	           $(LN_S) -f $(abs_top_builddir)/$(subdir)/$${hdr} $(top_builddir)/include/libetpan; \
              fi; \
            fi; \
 	     done; \

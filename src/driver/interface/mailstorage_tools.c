@@ -50,6 +50,7 @@
 #	include <netinet/in.h>
 #	include <sys/socket.h>
 #	include <unistd.h>
+#       include <sys/unistd.h>
 #	include <sys/wait.h>
 #	include <sys/ioctl.h>
 #endif
@@ -124,8 +125,12 @@ static void do_exec_command(int fd, const char *command,
     exit(1);
   
   /* Should we close stderr and reopen /dev/null? */
-  
+#if HAVE_SYSCONF
   maxopen = sysconf(_SC_OPEN_MAX);
+#else
+  maxopen = getdtablesize();
+#endif
+  
   for (i=3; i < maxopen; i++)
     close((int) i);
   

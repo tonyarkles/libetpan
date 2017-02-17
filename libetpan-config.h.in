@@ -40,4 +40,17 @@
 @   define LIBETPAN_EXPORT
 @endif
 
+#ifdef __native_client__
+@ifdef _NEWLIB_VERSION
+@define MS_SYNC 0
+@include <sys/types.h>
+/* Defined in glibc-compat */
+int msync(void *addr, size_t length, int flags);
+@include <sys/stat.h>
+@include <sys/socket.h>
+@include <netdb.h>
 @endif
+#endif
+
+@endif
+
